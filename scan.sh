@@ -27,12 +27,12 @@ package_data=(
     "chalk:5.6.1:5.6.0"
     "debug:4.4.2:4.4.1"
     "ansi-styles:6.2.2:6.2.1"
-    "duckdb/node-api:1.3.3:1.3.2"
-    "duckdb/duckdb-wasm:1.29.2:1.29.1"
-    "duckdb/node-bindings:1.3.3:1.3.2"
+    "@duckdb/node-api:1.3.3:1.3.2"
+    "@duckdb/duckdb-wasm:1.29.2:1.29.1"
+    "@duckdb/node-bindings:1.3.3:1.3.2"
     "duckdb:1.3.3:1.3.2"
     "proto-tinker-wc:0.1.87:0.1.86"
-    "coveops/abi:2.0.1:2.0.0"
+    "@coveops/abi:2.0.1:2.0.0"
 )
 
 # Helper functions to get package info
@@ -159,7 +159,7 @@ while IFS= read -r file; do
                         if [[ -n "$line" ]]; then
                             versions_found+=("$line")
                         fi
-                    done < <(grep "^\"\\?$package_name@" "$file" 2>/dev/null | sed 's/^"\\?'"$package_name"'@\\([^:"]*\\).*/\\1/' || true)
+                    done < <(grep "^\"\\?$package_name@" "$file" 2>/dev/null | sed "s|^\"\\?$package_name@\\([^:\"]*\\).*|\\1|" || true)
                     ;;
                 "pnpm-lock.yaml"|"pnpm-workspace.yaml")
                     # YAML format: /package@version: or package@version:
@@ -167,7 +167,7 @@ while IFS= read -r file; do
                         if [[ -n "$line" ]]; then
                             versions_found+=("$line")
                         fi
-                    done < <(grep "^[[:space:]]*['\"]\\?/\\?$package_name@" "$file" 2>/dev/null | sed 's/.*'"$package_name"'@\\([^:'"'"' ]*\\).*/\\1/' || true)
+                    done < <(grep "^[[:space:]]*['\"]\\?/\\?$package_name@" "$file" 2>/dev/null | sed "s|.*$package_name@\\([^:'\\\" ]*\\).*|\\1|" || true)
                     ;;
             esac
             
